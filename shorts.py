@@ -46,7 +46,7 @@ def download(url: str) -> Path:
             r = run(["gdown", "--fuzzy", url, "-O", str(out)])
         elif re.search(r"\.(mp4|mov|mkv|webm|avi|m4v)(\?|$)", low):
             log("Téléchargement : lien direct (curl)")
-            r = run(["curl", "-L", "--fail", "--retry", "3", "-o", str(out), url])
+            r = run(["curl", "-L", "--fail", "-A", "Mozilla/5.0", "--retry", "3", "-o", str(out), url])
         else:
             log("Téléchargement : yt-dlp")
             r = run(["yt-dlp", "-f", "bv*[height<=1080]+ba/b[height<=1080]/b", "--merge-output-format", "mp4",
