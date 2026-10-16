@@ -10,7 +10,7 @@ Transforme une vidéo longue 16:9 en **3 shorts 9:16** (1080x1920) sous-titrés,
 `video_url` (obligatoire), `job_id` (obligatoire), `mode` (`blur` ou `crop`, défaut `blur`), `title` (optionnel).
 
 ## Secrets (Settings > Secrets and variables > Actions)
-`GROQ_API_KEY`, `RCLONE_CONFIG_B64`, `DRIVE_FOLDER_ID`, `MAKE_CALLBACK_URL`.
+`GROQ_API_KEY`, `DRIVE_FOLDER_ID`, `MAKE_CALLBACK_URL`, et pour Drive : soit `RCLONE_CONFIG_B64`, soit `GDRIVE_CLIENT_ID` + `GDRIVE_CLIENT_SECRET` + `GDRIVE_REFRESH_TOKEN` (plus simple sur téléphone).
 
 ## Déclenchement
 `POST /repos/{OWNER}/shorts-auto/actions/workflows/shorts.yml/dispatches` avec `{"ref":"main","inputs":{"video_url":"...","job_id":"...","mode":"blur"}}`.

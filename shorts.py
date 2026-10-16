@@ -297,13 +297,23 @@ def verify_output(p: Path) -> float:
 # ---------------------------------------------------------------- 7. Drive
 def upload_drive(files, job_id, folder_id):
     b64 = os.environ.get("RCLONE_CONFIG_B64", "").strip()
-    if not b64 or not folder_id:
-        raise StepError("Google Drive non configuré : secrets RCLONE_CONFIG_B64 et/ou DRIVE_FOLDER_ID manquants.")
+    cid = os.environ.get("GDRIVE_CLIENT_ID", "").strip()
+    csec = os.environ.get("GDRIVE_CLIENT_SECRET", "").strip()
+    rtok = os.environ.get("GDRIVE_REFRESH_TOKEN", "").strip()
     cfg = WORK / "rclone.conf"
-    try:
-        cfg.write_bytes(base64.b64decode(b64))
-    except Exception:
-        raise StepError("RCLONE_CONFIG_B64 invalide (ce n'est pas du base64 correct).")
+    if not folder_id or not (b64 or (cid and csec and rtok)):
+        raise StepError("Google Drive non configuré : secrets DRIVE_FOLDER_ID et RCLONE_CONFIG_B64 "
+                        "(ou GDRIVE_CLIENT_ID/GDRIVE_CLIENT_SECRET/GDRIVE_REFRESH_TOKEN) manquants.")
+    if b64:
+        try:
+            cfg.write_bytes(base64.b64decode(b64))
+        except Exception:
+            raise StepError("RCLONE_CONFIG_B64 invalide (ce n'est pas du base64 correct).")
+    else:  # config construite à partir des 3 secrets (plus simple depuis un téléphone)
+        token = json.dumps({"access_token": "", "token_type": "Bearer", "refresh_token": rtok,
+                            "expiry": "2000-01-01T00:00:00Z"})
+        cfg.write_text(f"[gdrive]\ntype = drive\nclient_id = {cid}\nclient_secret = {csec}\n"
+                       f"scope = drive\ntoken = {token}\n")
     cfg.chmod(0o600)
     m = re.search(r"^\[([^\]]+)\]", cfg.read_text(), re.M)
     if not m:

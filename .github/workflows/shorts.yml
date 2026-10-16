@@ -46,6 +46,9 @@ jobs:
       SKIP_UPLOAD: ${{ inputs.skip_upload }}
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
+      GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+      GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+      GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
       DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
       MAKE_CALLBACK_URL: ${{ secrets.MAKE_CALLBACK_URL }}
     steps:
@@ -53,7 +56,7 @@ jobs:
 
       - name: Masquer les secrets dans les logs
         run: |
-          for v in "$GROQ_API_KEY" "$DRIVE_FOLDER_ID" "$MAKE_CALLBACK_URL"; do
+          for v in "$GROQ_API_KEY" "$DRIVE_FOLDER_ID" "$MAKE_CALLBACK_URL" "$GDRIVE_CLIENT_SECRET" "$GDRIVE_REFRESH_TOKEN"; do
             [ -n "$v" ] && echo "::add-mask::$v"
           done
           exit 0
