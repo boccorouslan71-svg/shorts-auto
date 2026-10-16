@@ -141,6 +141,9 @@ def local_transcribe(path: Path):
 
 
 def transcribe(src: Path, total: float, warnings: list):
+    if not has_audio(src):
+        warnings.append("La vidéo n'a pas de piste audio : pas de sous-titres.")
+        return []
     chunks = extract_chunks(src, total)
     key = os.environ.get("GROQ_API_KEY", "").strip()
     words = []
