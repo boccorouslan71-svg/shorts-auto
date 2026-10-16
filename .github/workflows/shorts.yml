@@ -48,7 +48,6 @@ jobs:
       RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
       DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
       MAKE_CALLBACK_URL: ${{ secrets.MAKE_CALLBACK_URL }}
-      WORK_DIR: ${{ runner.temp }}
     steps:
       - uses: actions/checkout@v4
 
