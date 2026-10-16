@@ -1,0 +1,4 @@
+__pycache__/
+*.conf
+*.mp4
+!assets/pub.mp4
